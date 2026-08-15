@@ -47,10 +47,11 @@ while True:
         bantuan()
     elif perintah == "music":
         webbrowser.open(music)
-        time.sleep(1.2)
+        time.sleep(1.5)
         lagu = random.randint(0, 10)
         for i in range(lagu):
             pyautogui.hotkey("shift", "n")
+        pyautogui.press("s")
         done()
     elif perintah == "roblox":
         os.system("taskkill /f /im RobloxPlayerBeta.exe >nul 2>&1")
@@ -62,7 +63,7 @@ while True:
         os.system("start roblox-player:")
         done()
     elif perintah == "youtube":
-        webbrowser.open(google)
+        webbrowser.open(youtube)
         done()
     elif perintah == "google":
         webbrowser.open(google)
