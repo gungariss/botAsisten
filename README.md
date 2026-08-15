@@ -2,7 +2,8 @@
 Program ini adalah asisten virtual berbasis teks yang dirancang menggunakan bahasa pemrograman Python untuk mempermudah kegiatan sehari-hari di komputer. Hanya dengan mengetikkan kata kunci sederhana, program ini dapat mengeksekusi berbagai tugas secara otomatis.
 
 ## Fitur Utama:
-#### Pemutar Musik Cerdas: Membuka daftar putar musik di peramban web dan secara otomatis melompati (skip) beberapa lagu secara acak, sehingga pengguna mendapatkan variasi lagu yang berbeda setiap kali diputar.
+#### Pemutar Musik Cerdas:
+Membuka daftar putar musik di peramban web dan secara otomatis melompati (skip) beberapa lagu secara acak, sehingga pengguna mendapatkan variasi lagu yang berbeda setiap kali diputar.
 
 #### Peluncur Permainan:
 Memudahkan pengguna untuk membuka permainan seperti Minecraft (melalui TLauncher) menggunakan simulasi ketikan, dan Roblox dengan sistem pembersihan aplikasi di latar belakang.
