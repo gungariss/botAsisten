@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import simpledialog
 import webbrowser
 import pyautogui
 import time
@@ -12,7 +13,7 @@ import os
 jendela = tk.Tk()
 jendela.title("Asisten Python (Anti-Malas)")
 jendela.geometry("600x450")
-jendela.configure(bg="#0c0c0c") # Warna latar hitam khas hacker
+jendela.configure(bg="#0c0c0c")
 
 # ====================================================
 # 2. SISTEM PERTAHANAN TOMBOL X (MUTLAK)
@@ -20,7 +21,7 @@ jendela.configure(bg="#0c0c0c") # Warna latar hitam khas hacker
 def dilarang_tutup():
     messagebox.showwarning("Akses Ditolak!", "Tombol X sudah dimatikan!\n\nUntuk keluar, ketik kalimat rahasianya di dalam program!")
 
-# Mengganti fungsi bawaan tombol 'X' menjadi fungsi peringatan di atas
+
 jendela.protocol("WM_DELETE_WINDOW", dilarang_tutup)
 
 # ====================================================
@@ -31,14 +32,15 @@ youtube = "https://youtube.com"
 google = "https://google.com"
 gemini = "https://gemini.google.com"
 hitung_keluar = 0
+hitung_keluar1 = 0
 
-# Fungsi ini menggantikan print() agar teks muncul di layar aplikasi
+
 def cetak_teks(teks):
     layar_teks.configure(state=tk.NORMAL)
     layar_teks.insert(tk.END, teks + "\n")
     layar_teks.configure(state=tk.DISABLED)
     layar_teks.see(tk.END)
-    jendela.update() # Memperbarui layar agar tidak macet saat ada time.sleep()
+    jendela.update()
 
 def done():
     cetak_teks("\n===========================")
@@ -59,13 +61,13 @@ def opening():
     cetak_teks("===== ASISTEN PYTHON! =====")
     cetak_teks("===========================\n")
     cetak_teks("Ketik 'bantuan' untuk lihat daftar perintah, atau 'keluar' untuk tutup asisten \n")
-
 # ====================================================
 # 4. LOGIKA UTAMA ASISTEN
 # ====================================================
 def proses_perintah(event=None):
-    # Wajib tambahkan kata kunci global di sini
-    global hitung_keluar 
+   
+    global hitung_keluar
+    global hitung_keluar1
     
     perintah = kotak_input.get().lower().strip()
     kotak_input.delete(0, tk.END) 
@@ -73,21 +75,37 @@ def proses_perintah(event=None):
     cetak_teks(f"\n> Kamu: {perintah}")
     
     # --- FITUR KELUAR DENGAN SYARAT 2X ---
-    if perintah == "hari ini aku sudah mengerjakan tugas di komputer":
-        hitung_keluar += 1 # Tambah angka penghitung sebanyak 1
-        
-        if hitung_keluar == 1:
-            cetak_teks("Asisten: Bagus! Tapi itu baru satu kali.")
-            cetak_teks("Ketik kalimat yang sama SATU KALI LAGI untuk konfirmasi!")
-        elif hitung_keluar == 2:
-            cetak_teks("Asisten: Konfirmasi berhasil! Selamat beristirahat.")
-            jendela.update()
-            time.sleep(2)
-            jendela.destroy() 
+    if perintah == "keluar":
+        konfirmasi = simpledialog.askstring("Konfirmasi", "Ketik passwordnya 2x sebelum keluar:")
             
-    elif perintah == "keluar":
-        cetak_teks("Asisten: Kamu tidak bisa keluar sembarangan!")
-        cetak_teks("Ketik passwordnya 2 kali")
+        if konfirmasi == "aku sudah mengerjakan tugas di komputer":
+                # Pastikan ada 'global hitung_keluar' di awal fungsi jika kode ini di dalam fungsi
+            hitung_keluar += 1 
+                
+            if hitung_keluar == 1:
+                cetak_teks("Asisten: Bagus! Tapi itu baru satu kali.")
+                pyautogui.write("keluar")
+                time.sleep(0.5)
+                pyautogui.press("enter")
+            elif hitung_keluar == 2:
+                cetak_teks("Asisten: Konfirmasi berhasil! Selamat beristirahat.")
+                jendela.update()
+                time.sleep(2)
+                jendela.destroy()
+        # hitung_keluar += 1 # Tambah angka penghitung sebanyak 1
+        
+        # if hitung_keluar == 1:
+        #     cetak_teks("Asisten: Bagus! Tapi itu baru satu kali.")
+        #     cetak_teks("Ketik kalimat yang sama SATU KALI LAGI untuk konfirmasi!")
+        # elif hitung_keluar == 2:
+        #     cetak_teks("Asisten: Konfirmasi berhasil! Selamat beristirahat.")
+        #     jendela.update()
+        #     time.sleep(2)
+        #     jendela.destroy() 
+            
+    # elif perintah == "keluar":
+    #     cetak_teks("Asisten: Kamu tidak bisa keluar sembarangan!")
+    #     cetak_teks("Ketik passwordnya 2 kali")
         
     elif perintah == "bantuan":
         bantuan()
@@ -131,19 +149,31 @@ def proses_perintah(event=None):
         done()
         
     elif perintah == "shutdown":
-        # Mengganti input(y/n) dengan Pop-Up Modern!
-        konfirmasi = messagebox.askyesno("Konfirmasi", "Apakah kamu yakin akan mematikan komputer?")
-        if konfirmasi:
-            cetak_teks("⚠️ Komputer akan dimatikan dalam 5 detik!")
-            jendela.update()
-            time.sleep(5)
-            for i in range(10):
-                pyautogui.hotkey("alt", "tab")
-                pyautogui.hotkey("alt", "f4")
-                pyautogui.press("enter")
-            # os.system("shutdown /s /t 0")
-            cetak_teks("hello world")
-            done()
+        # Mengganti input dengan Pop-Up dialog Tkinter
+        konfirmasi = simpledialog.askstring("Konfirmasi", "Ketik passwordnya sebelum shutdown:")
+        
+        if konfirmasi == "aku sudah mengerjakan tugas di komputer":
+            # Pastikan ada 'global hitung_keluar' di awal fungsi jika kode ini di dalam fungsi
+            hitung_keluar1 += 1 
+            
+            if hitung_keluar1 == 1:
+                cetak_teks("Asisten: Bagus! Tapi itu baru satu kali.")
+                cetak_teks("Ketik perintah shutdown dan password SATU KALI LAGI untuk konfirmasi!")
+            elif hitung_keluar1 == 2:
+                cetak_teks("Asisten: Konfirmasi berhasil! Selamat beristirahat.")
+                jendela.update()
+                time.sleep(2)
+                jendela.destroy()
+            # cetak_teks("⚠️ Komputer akan dimatikan dalam 5 detik!")
+            # jendela.update()
+            # time.sleep(5)
+            # for i in range(10):
+            #     pyautogui.hotkey("alt", "tab")
+            #     pyautogui.hotkey("alt", "f4")
+            #     pyautogui.press("enter")
+            # # os.system("shutdown /s /t 0")
+            # cetak_teks("hello world")
+            # done()
         else:
             batal()
             
@@ -166,7 +196,21 @@ def proses_perintah(event=None):
         time.sleep(0.05)
         webbrowser.open(google)
         done()
-        
+    
+    elif perintah == "mc":
+        pyautogui.hotkey("win", "s")
+        pyautogui.write("Tlauncher", interval=0.05)
+        pyautogui.press("enter")
+        pyautogui.hotkey("win", "s")
+        pyautogui.write("Capcut")
+        pyautogui.press("enter")
+        pyautogui.hotkey("win", "s")
+        pyautogui.write("obs studio")
+        pyautogui.press("enter")
+        time.sleep(3.3)
+        pyautogui.hotkey("alt", "tab", "tab")
+        done()
+    
     else:
         cetak_teks("Maaf, saya tidak mengerti")
 
