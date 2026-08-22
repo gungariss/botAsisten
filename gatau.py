@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import simpledialog
+from music import downloadlagu
+from music import putar_musik
+import threading
 import webbrowser
 import pyautogui
 import time
@@ -11,8 +14,9 @@ import os
 # 1. SETUP JENDELA APLIKASI GUI
 # ====================================================
 jendela = tk.Tk()
-jendela.title("Asisten Python (Anti-Malas)")
+jendela.title("Asisten Python")
 jendela.geometry("600x450")
+jendela.minsize(400, 300) # Tambahkan ini agar jendela tidak bisa ditarik terlalu kecil
 jendela.configure(bg="#0c0c0c")
 
 # ====================================================
@@ -33,6 +37,7 @@ google = "https://google.com"
 gemini = "https://gemini.google.com"
 hitung_keluar = 0
 hitung_keluar1 = 0
+status_input = "normal"
 
 
 def cetak_teks(teks):
@@ -64,20 +69,44 @@ def opening():
 # ====================================================
 # 4. LOGIKA UTAMA ASISTEN
 # ====================================================
+
 def proses_perintah(event=None):
-   
-    global hitung_keluar
-    global hitung_keluar1
+    global hitung_keluar, hitung_keluar1, status_input
     
-    perintah = kotak_input.get().lower().strip()
+    teks_input = kotak_input.get().strip()
     kotak_input.delete(0, tk.END) 
     
+# 1. JIKA PROGRAM SEDANG MENUNGGU LINK DOWNLOAD
+    if status_input == "tunggu_link":
+        cetak_teks(f"\n> Kamu: {teks_input}")
+        
+        if teks_input:
+            # --- MENGGUNAKAN THREADING ---
+            # Kita menyuruh "pegawai baru" (thread) untuk menjalankan downloadlagu
+            # Args berisi link dan fungsi cetak_teks agar file sebelah bisa nge-print ke layar
+            thread_download = threading.Thread(target=downloadlagu, args=(teks_input, cetak_teks))
+            
+            # Daemon = True artinya jika aplikasinya di-X (tutup), downloadnya otomatis ikut berhenti
+            thread_download.daemon = True 
+            
+            # Mulai kerjakan di latar belakang!
+            thread_download.start() 
+            
+        else:
+            cetak_teks("Asisten: Dibatalkan karena tidak ada link.")
+        
+        status_input = "normal"  # Kembalikan status ke normal
+        # Hapus fungsi done() di sini, karena sudah di-handle oleh file ytdownloader
+        return
+
+    # 2. JIKA DALAM KONDISI NORMAL (MENGKETIK PERINTAH BIASA)
+    perintah = teks_input.lower()
     cetak_teks(f"\n> Kamu: {perintah}")
-    
+
     # --- FITUR KELUAR DENGAN SYARAT 2X ---
     if perintah == "keluar":
         konfirmasi = simpledialog.askstring("Konfirmasi", "Ketik passwordnya 2x sebelum keluar:")
-            
+
         if konfirmasi == "aku sudah mengerjakan tugas di komputer":
                 # Pastikan ada 'global hitung_keluar' di awal fungsi jika kode ini di dalam fungsi
             hitung_keluar += 1 
@@ -92,20 +121,6 @@ def proses_perintah(event=None):
                 jendela.update()
                 time.sleep(2)
                 jendela.destroy()
-        # hitung_keluar += 1 # Tambah angka penghitung sebanyak 1
-        
-        # if hitung_keluar == 1:
-        #     cetak_teks("Asisten: Bagus! Tapi itu baru satu kali.")
-        #     cetak_teks("Ketik kalimat yang sama SATU KALI LAGI untuk konfirmasi!")
-        # elif hitung_keluar == 2:
-        #     cetak_teks("Asisten: Konfirmasi berhasil! Selamat beristirahat.")
-        #     jendela.update()
-        #     time.sleep(2)
-        #     jendela.destroy() 
-            
-    # elif perintah == "keluar":
-    #     cetak_teks("Asisten: Kamu tidak bisa keluar sembarangan!")
-    #     cetak_teks("Ketik passwordnya 2 kali")
         
     elif perintah == "bantuan":
         bantuan()
@@ -210,20 +225,34 @@ def proses_perintah(event=None):
         time.sleep(3.3)
         pyautogui.hotkey("alt", "tab", "tab")
         done()
+        
+    elif perintah == "download lagu":
+        status_input = "tunggu_link"  # Ubah status jadi menunggu link
+        cetak_teks("Asisten: Masukkan link YouTube-nya di bawah ini.")
+        cetak_teks("(Tips: Bisa ketik banyak link sekaligus, pisahkan dengan spasi!)")
+        return # Berhenti sebentar menunggu user mengetik link
     
+    elif perintah in ["play music", "putar music", "play musik", "putar musik"]:
+        cetak_teks("Musik akan diputar...")
+        time.sleep(0.1)
+        putar_musik()
+        done()
+        
     else:
-        cetak_teks("Maaf, saya tidak mengerti")
-
+        cetak_teks("halo")
 # ====================================================
 # 5. DESAIN TAMPILAN (UI) BAWAH
 # ====================================================
-# Layar besar tempat teks muncul (Warna font hijau ala hacker)
-layar_teks = tk.Text(jendela, bg="#0c0c0c", fg="#00ff00", font=("Consolas", 10), state=tk.DISABLED)
-layar_teks.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
 
-# Kotak panjang tempat kamu ngetik perintah
+# 1. KOTAK INPUT DI-PACK DULUAN
+# Menggunakan side=tk.BOTTOM agar posisi kotak input dikunci di bawah terlebih dahulu
 kotak_input = tk.Entry(jendela, font=("Consolas", 12), bg="#1e1e1e", fg="white", insertbackground="white")
-kotak_input.pack(padx=10, pady=(0, 10), fill=tk.X)
+kotak_input.pack(side=tk.BOTTOM, padx=10, pady=(0, 10), fill=tk.X)
+
+# 2. LAYAR TEKS DI-PACK SETELAHNYA
+# Menggunakan side=tk.TOP dan expand=True untuk mengisi sisa ruang kosong di atas kotak input
+layar_teks = tk.Text(jendela, bg="#0c0c0c", fg="#00ff00", font=("Consolas", 10), state=tk.DISABLED)
+layar_teks.pack(side=tk.TOP, padx=10, pady=10, fill=tk.BOTH, expand=True)
 
 # Menyambungkan tombol ENTER (Return) dengan fungsi logika
 kotak_input.bind("<Return>", proses_perintah)
