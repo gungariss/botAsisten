@@ -1,2 +1,2 @@
-# Isi file .gitignore
 .env
+__pycache__
