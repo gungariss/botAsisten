@@ -63,7 +63,7 @@ def batal():
 
 def bantuan():
     cetak_teks("[Daftar Perintah]")
-    cetak_teks("- Music\n- Youtube\n- Roblox\n- Google\n- Minecraft\n- Kerja\n- Shutdown\n- Download Lagu\n- mc\n- Mode AI")
+    cetak_teks("- Music\n- Youtube\n- Roblox\n- Google\n- Minecraft\n- Kerja\n- Shutdown\n- Download Lagu\n- Mc\n- Code\n- Mode AI")
 
 def opening():
     cetak_teks("===========================")
@@ -328,6 +328,7 @@ def proses_perintah(event=None):
         time.sleep(0.2)
         pyautogui.hotkey("win", "r")
         pyautogui.write("file:///F:/kerjaan/code")
+        pyautogui.press("enter")
         time.sleep(0.2)
         webbrowser.open(github)
         done()
