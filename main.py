@@ -40,7 +40,8 @@ password = "aku sudah mengerjakan tugas di komputer"
 hitung_keluar = 0
 hitung_keluar1 = 0
 status_input = "normal"
-modelai = "deepseek-chat"
+github = "https://github.com/gungariss"
+modelai = ""
 riwayat_chat = []
 
 def cetak_teks(teks):
@@ -101,7 +102,7 @@ def panggil_ai(teks, model):
         # Di kode aslimu tertulis "qwen/qwen3.8-27b"
         model_digunakan = "qwen/qwen3.8-27b"
         
-        instruksi = """Kamu adalah asistenku. Jawab semua pertanyaan dengan singkat tanpa basa basi. 
+        instruksi = """Kamu adalah asistenku, jawab pertanyaan dengan singkat namun dengan tingkat kebenaran 100%, cek jawaban sebelum mengirim
         PENTING: Gunakan teks biasa (plain text) saja. Dilarang keras menggunakan format LaTeX (seperti \\frac atau tanda $), dan kurangi penggunaan Markdown tebal/miring. Gunakan tanda garis miring (/) untuk pecahan dan huruf 'x' atau bintang (*) untuk perkalian."""
         
         # 1. Jika riwayat kosong, masukkan instruksi sistem pertama kali
@@ -285,11 +286,7 @@ def proses_perintah(event=None):
             batal()
             
     elif perintah == "kerja":
-        cetak_teks("Menjalankan rutinitas abc...")
-        pyautogui.hotkey("win", "r")
-        pyautogui.write("file:///F:/kerjaan")
-        pyautogui.hotkey("enter")
-        time.sleep(0.05)
+        cetak_teks("Menjalankan rutinitas kerja...")
         webbrowser.open(youtube)
         time.sleep(0.2)
         webbrowser.open(music)
@@ -316,8 +313,23 @@ def proses_perintah(event=None):
         pyautogui.hotkey("win", "s")
         pyautogui.write("obs studio", interval=0.05)
         pyautogui.press("enter")
+        time.sleep(0.2)
+        pyautogui.hotkey("win", "r")
+        pyautogui.write("file:///F:/kerjaan/youtube")
+        pyautogui.hotkey("enter")
         time.sleep(3.3)
         pyautogui.hotkey("alt", "tab", "tab")
+        done()
+        
+    elif perintah == "code":
+        pyautogui.hotkey("win","s")
+        pyautogui.write("vscode", interval=0.05)
+        pyautogui.press("enter")
+        time.sleep(0.2)
+        pyautogui.hotkey("win", "r")
+        pyautogui.write("file:///F:/kerjaan/code")
+        time.sleep(0.2)
+        webbrowser.open(github)
         done()
         
     elif perintah == "download lagu":
