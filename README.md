@@ -8,7 +8,6 @@
 
 <p>
 <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square" alt="Python"></a>
-<a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License"></a>
 <a href="#prasyarat"><img src="https://img.shields.io/badge/Platform-Windows-lightgrey?style=flat-square" alt="Platform"></a>
 <a href="main.py"><img src="https://img.shields.io/badge/GUI-Tkinter-brightgreen?style=flat-square" alt="Tkinter"></a>
 </p>
